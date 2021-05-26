@@ -1,1 +1,59 @@
-<p>nav-bar works!</p>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top mb-3">
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="'.'">
+      <i class="fas fa-paw mr-1"></i>
+      <span i18n="beaucerons brand|The beaucerons branding">Beaucerons</span>
+    </a>
+    <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
+      &#9776;
+    </button>
+    <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav me-start">
+        <li class="nav-item">
+          <a class="nav nav-link" [routerLink]="'.'" (click)="isMenuCollapsed = true">
+            <span i18n="discover link|The discover link">Discover the breed</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-secondary" id="dropdownBasic1" ngbDropdownToggle>
+              <span i18n="search link|The search link">&nbsp;Looking for</span>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem>
+                <a class="nav nav-link" [routerLink]="'.'" (click)="isMenuCollapsed = true">
+                  <span i18n="search link|The search link">a dog</span>
+                </a>
+              </button>
+              <button ngbDropdownItem>
+                <a class="nav nav-link" [routerLink]="'.'" (click)="isMenuCollapsed = true">
+                  <span i18n="search link|The search link">a pup</span>
+                </a>
+              </button>
+              <button ngbDropdownItem>
+                <a class="nav nav-link" [routerLink]="'.'" (click)="isMenuCollapsed = true">
+                  <span i18n="search link|The search link">breeder's dogs</span>
+                </a>
+              </button>
+              <button ngbDropdownItem>
+                <a class="nav nav-link" [routerLink]="'.'" (click)="isMenuCollapsed = true">
+                  <span i18n="wedding link|The wedding link">a mariage match</span>
+                </a>
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav me-start me-auto">
+        <li class="nav-item active">
+          <app-search></app-search>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav me-end">
+        <li class="nav-item active">
+          <app-auth-button></app-auth-button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

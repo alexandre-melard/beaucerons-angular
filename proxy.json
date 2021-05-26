@@ -1,0 +1,7 @@
+{
+  "/command/beaucerons/sql": {
+    "target": "http://localhost:2480",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

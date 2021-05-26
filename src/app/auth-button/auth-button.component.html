@@ -1,0 +1,38 @@
+<div *ngIf="auth.isAuthenticated$ | async; else notShow">
+  <div ngbDropdown class="d-inline-block">
+    <button class="btn btn-outline-secondary" id="dropdownBasic1" ngbDropdownToggle>
+      <i class="fas fa-user-check mr-1"></i>
+      <span *ngIf="auth.user$ | async as user" i18n="hi user|welcome the user">
+        Hi {{ user.name }}
+      </span>
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <button ngbDropdownItem>
+        <span i18n="profile button|The profile button">Profile</span>
+      </button>
+      <button ngbDropdownItem>
+        <span i18n="dogs button|The dogs button">My dogs</span>
+      </button>
+      <button ngbDropdownItem>
+        <span i18n="litters button|The litters button">My litters</span>
+      </button>
+      <button ngbDropdownItem>
+        <span i18n="match button|The match button">My weddings</span>
+      </button>
+      <button ngbDropdownItem>
+        <span i18n="match button|The match button">My favourite dogs</span>
+      </button>
+      <button ngbDropdownItem (click)="auth.logout({ returnTo: document.location.origin })">
+        <span i18n="logout button|The logout button">Sign out</span>
+      </button>
+    </div>
+  </div>
+</div>
+<ng-template #notShow>
+  <li class="nav-item active">
+    <button class="btn btn-light " type="button " (click)="auth.loginWithRedirect() ">
+      <i class="fas fa-user-slash mr-1 "></i>
+      <span i18n="login button|The login button ">Sign in</span>
+    </button>
+  </li>
+</ng-template>
