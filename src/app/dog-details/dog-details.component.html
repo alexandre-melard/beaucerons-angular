@@ -1,0 +1,25 @@
+<h2>{{ dog.name }}</h2>
+<table class="table">
+  <tbody>
+    <tr *ngIf="dog.type">
+      <th>Sex</th>
+      <td>{{ (dog.type == "Male")?"Male":"Female"}}</td>
+    </tr>
+    <tr *ngIf="dog.tattoo">
+      <th>Tattoo</th>
+      <td>{{dog.tattoo}}</td>
+    </tr>
+    <tr *ngIf="dog.ship">
+      <th>Ship</th>
+      <td>{{dog.ship}}</td>
+    </tr>
+    <tr *ngIf="dog.cotation">
+      <th>Cotation</th>
+      <td>{{dog.cotation}}</td>
+    </tr>
+    <tr *ngIf="dog.dob">
+      <th>Date of birth</th>
+      <td>{{dog.dob}}</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,5 +1,5 @@
 export class Record {
-  name!: String
-  uuid!: String
-  type!: String
+  name!: string
+  uuid!: string
+  type!: string
 }

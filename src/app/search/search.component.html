@@ -1,12 +1,12 @@
 <form>
   <div class="input-group">
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let record of filteredRecords$ | async">
-        {{record.name}}
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='goToRoute($event.option.value)' [displayWith]="displayRecord">
+      <mat-option *ngFor="let record of filteredRecords$ | async" [value]="record">
+        [{{record.type | slice:0:1}}] {{record.name}}
       </mat-option>
     </mat-autocomplete>
     <input #searchBox type="text" class="form-control" placeholder="Dog name, id, breeder, owner..." aria-label="search"
-      aria-describedby="button-search" (input)="search(searchBox.value)" [matAutocomplete]="auto">
+      aria-describedby="button-search" (input)="search(searchBox.value)" [matAutocomplete]="auto" >
     <button class="btn btn-outline-secondary" type="button" id="button-search"> <i
         class="fas fa-search mr-1"></i>
     </button>

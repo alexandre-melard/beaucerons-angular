@@ -10,6 +10,9 @@ export const environment = {
     angular: 'Angular 12.0.0',
     bootstrap: 'Bootstrap 5.0.1',
     fontawesome: 'Font Awesome 5.15.3',
+  },
+  backend: {
+    url: 'http://localhost:4200/command/beaucerons/sql',
   }
 };
 
