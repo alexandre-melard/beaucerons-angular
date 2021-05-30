@@ -20,6 +20,30 @@ export class BackendService {
 
   constructor(private http: HttpClient) {}
 
+  private getParents(generations: number, current?: number): string {
+    let curr;
+    if(!current) {
+      current = 1;
+    } else {
+      curr = current+1;
+    }
+    if (current < generations) {
+      return `project('name', 'uuid', 'sir', 'dam').
+      by('name').
+      by('uuid').
+      by(inE('Parent').has('type', 'FATHER').
+        outV().
+        ${this.getParents(generations, curr)}
+      ).
+      by(inE('Parent').has('type', 'MOTHER').
+        outV().
+        ${this.getParents(generations, curr)}
+      )`
+    } else {
+      return `project('name', 'uuid').by('name').by('uuid')`;
+    }
+  }
+
   /* GET dog with ancesters matching uuid */
   getDogAncesters(uuid: string, depth=5): Observable<Dog[]> {
     if (!uuid.trim()) {
@@ -27,12 +51,11 @@ export class BackendService {
       console.log(`uuid is empty(${uuid})`);
       return of();
     }
-    console.debug(`post select: ${uuid} on url: ${this.backendUrl}`);
-
+    console.debug(`post select: ${uuid} on url: ${this.backendUrl}/gremlin`);
     return this.http
       .post<DogResult>(
-        this.backendUrl,
-        `select @rid, name, uuid, @class, in_Parent from (TRAVERSE in('Parent') FROM (select from Dog where uuid='${uuid}') MAXDEPTH ${depth})`,
+        `${this.backendUrl}/gremlin`,
+        `g.V().has('uuid', '${uuid}').${this.getParents(depth, 1)}`,
         this.httpOptions
       )
       .pipe(
@@ -57,7 +80,7 @@ export class BackendService {
 
     return this.http
       .post<DogResult>(
-        this.backendUrl,
+        `${this.backendUrl}/sql`,
         `select @RID as id, @CLASS as type, name, uuid, ship, tattoo, cotation, dob, color, other from (traverse in('Parent') from (select @RID from Dog where uuid='${uuid}') while $depth < 2)`,
         this.httpOptions
       )
@@ -83,7 +106,7 @@ export class BackendService {
 
     return this.http
       .post<DogResult>(
-        this.backendUrl,
+        `${this.backendUrl}/sql`,
         `SELECT @RID as id, @CLASS as type, name, uuid, ship, tattoo, cotation, dob, color, other FROM Dog  WHERE uuid = '${uuid}' limit ${limit}`,
         this.httpOptions
       )
@@ -107,7 +130,7 @@ export class BackendService {
     }
     return this.http
       .post<SearchResult>(
-        this.backendUrl,
+        `${this.backendUrl}/sql`,
         `SELECT uuid, name, @CLASS as type FROM Named  WHERE SEARCH_CLASS('${term}') = true limit ${limit}`,
         this.httpOptions
       )

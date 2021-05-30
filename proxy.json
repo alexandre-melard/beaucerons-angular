@@ -3,5 +3,10 @@
     "target": "http://localhost:2480",
     "secure": false,
     "logLevel": "debug"
+  },
+  "/command/beaucerons/gremlin": {
+    "target": "http://localhost:2480",
+    "secure": false,
+    "logLevel": "debug"
   }
 }

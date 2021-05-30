@@ -1,21 +1,16 @@
-<div *ngIf="dogs$ | async as dogs">
-  <app-dog-details *ngIf="getDog(dogs) as dog" [dog]="dog"></app-dog-details>
+<div *ngIf="dog">
+  <app-dog-details [dog]="dog"></app-dog-details>
   <hr>
   <div class="row">
     <div class="col">
-      <app-dog-details *ngIf="getSir(dogs) as father" [dog]="father"></app-dog-details>
+      <app-dog-details *ngIf="dog.sir" [dog]="dog.sir"></app-dog-details>
     </div>
     <div class="col">
-      <app-dog-details *ngIf="getDam(dogs) as mother" [dog]="mother"></app-dog-details>
+      <app-dog-details *ngIf="dog.dam" [dog]="dog.dam"></app-dog-details>
     </div>
   </div>
   <hr>
-  <div class="row">
-    <div class="col">
-      <app-dog-details *ngIf="getSir(dogs) as father" [dog]="father"></app-dog-details>
-    </div>
-    <div class="col">
-      <app-dog-details *ngIf="getDam(dogs) as mother" [dog]="mother"></app-dog-details>
-    </div>
+  <h2>Pedigree</h2>
+  <div class="tree" [innerHTML]="printPedigree()">
   </div>
 </div>

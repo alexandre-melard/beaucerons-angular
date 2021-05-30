@@ -9,4 +9,7 @@ export class Dog {
   dob?: string;
   color?: string;
   other?: string;
+  parents?: string[];
+  sir?: Dog;
+  dam?: Dog;
 }
