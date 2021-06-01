@@ -19,6 +19,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SearchComponent } from './search/search.component';
 import { DogDetailsComponent } from './dog-details/dog-details.component';
 import { DogComponent } from './dog/dog.component';
+import { TreeComponent } from './tree/tree.component';
+import { NodeComponent } from './tree/node/node.component';
 
 const cookieConfig: NgcCookieConsentConfig = {
   cookie: {
@@ -52,6 +54,7 @@ const cookieConfig: NgcCookieConsentConfig = {
     RouterModule.forRoot([
       { path: '', component: AppComponent },
       { path: 'dog/:uuid', component: DogComponent },
+      { path: 'tree', component: TreeComponent },
     ]),
     NgbModule,
     AuthModule.forRoot({
@@ -71,6 +74,8 @@ const cookieConfig: NgcCookieConsentConfig = {
     SearchComponent,
     DogDetailsComponent,
     DogComponent,
+    TreeComponent,
+    NodeComponent,
   ],
   bootstrap: [AppComponent],
 })

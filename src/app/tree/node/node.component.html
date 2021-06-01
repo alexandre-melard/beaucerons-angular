@@ -1,0 +1,12 @@
+<li *ngIf="branch;else rootTpl">
+    <a [href]="item?.link"><span [class]="item?.class">{{item.label}}</span></a>
+    <ul *ngIf="item.parents">
+        <app-node *ngFor="let parent of item.parents" [item]="parent" [branch]="true"></app-node>
+    </ul>
+</li>
+<ng-template #rootTpl>
+    <a [href]="item?.link"><span [class]="item?.class">{{item.label}}</span></a>
+    <ul *ngIf="item.parents">
+        <app-node *ngFor="let parent of item.parents" [item]="parent" [branch]="true"></app-node>
+    </ul>
+</ng-template>
