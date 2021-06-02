@@ -21,6 +21,7 @@ export class DogComponent {
       // First get the dog uuid from the current route.
       const routeParams = this.route.snapshot.paramMap;
       let uuid = routeParams.get('uuid');
+
       if (uuid) {
         // Find the dog that correspond with the uuid provided in route.
         this.backendService.getDogAndParents(uuid).subscribe((dogs) => {

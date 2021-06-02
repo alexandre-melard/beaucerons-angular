@@ -45,7 +45,7 @@ export class BackendService {
   }
 
   /* GET dog with ancesters matching uuid */
-  getDogAncesters(uuid: string, depth=5): Observable<Dog> {
+  getDogPedigree(uuid: string, depth=5): Observable<Dog> {
     if (!uuid.trim()) {
       // if not search term, return empty record array.
       console.log(`uuid is empty(${uuid})`);
@@ -66,8 +66,8 @@ export class BackendService {
         }),
         tap((x) =>
           x
-            ? this.log(`found dog matching "${uuid}"`)
-            : this.log(`no dog matching "${uuid}"`)
+            ? this.log(`getDogPedigree: found dog matching "${uuid}"`)
+            : this.log(`getDogPedigree: no dog matching "${uuid}"`)
         ),
         catchError(this.handleError<Dog>(`getDog id=${uuid}`))
       );
@@ -92,8 +92,8 @@ export class BackendService {
         map((value) => value.result),
         tap((x) =>
           x
-            ? this.log(`found dog matching "${uuid}"`)
-            : this.log(`no dog matching "${uuid}"`)
+            ? this.log(`getDogAndParents: found dog matching "${uuid}"`)
+            : this.log(`getDogAndParents: no dog matching "${uuid}"`)
         ),
         catchError(this.handleError<Dog[]>(`getDog id=${uuid}`))
       );
@@ -119,8 +119,8 @@ export class BackendService {
         map((values) => values[0]),
         tap((x) =>
           x
-            ? this.log(`found dog matching "${uuid}"`)
-            : this.log(`no dog matching "${uuid}"`)
+            ? this.log(`getDog: found dog matching "${uuid}"`)
+            : this.log(`getDog: no dog matching "${uuid}"`)
         ),
         catchError(this.handleError<Dog>(`getDog id=${uuid}`))
       );
@@ -142,8 +142,8 @@ export class BackendService {
         map((value) => value.result),
         tap((x) =>
           x.length
-            ? this.log(`found records matching "${term}"`)
-            : this.log(`no records matching "${term}"`)
+            ? this.log(`searchRecords: found records matching "${term}"`)
+            : this.log(`searchRecords: no records matching "${term}"`)
         ),
         catchError(this.handleError<Record[]>('searchRecords', []))
       );
@@ -170,6 +170,6 @@ export class BackendService {
 
   /** Log a RecordService message with the MessageService */
   private log(message: string) {
-    console.log(`RecordService: ${message}`);
+    console.log(`BackendService: ${message}`);
   }
 }
