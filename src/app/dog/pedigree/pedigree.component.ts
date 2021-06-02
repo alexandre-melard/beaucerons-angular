@@ -1,24 +1,27 @@
 import { Dog } from './../../model/dog';
 import { BackendService } from './../../backend.service';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pedigree',
   templateUrl: './pedigree.component.html',
   styleUrls: ['./pedigree.component.css'],
 })
-export class PedigreeComponent implements OnInit {
+export class PedigreeComponent {
   data!: Observable<Dog>;
   @Input() uuid!: Observable<string>;
   constructor(
+    private route: ActivatedRoute,
     private backendService: BackendService
-  ) {}
-
-  ngOnInit(): void {
-    this.uuid.subscribe(uuid => {
-      this.data = this.backendService.getDogAncesters(uuid, 5);
+  ) {
+    route.params.subscribe((val) => {
+      const routeParams = this.route.snapshot.paramMap;
+      let uuid = routeParams.get('uuid');
+      if (uuid) {
+        this.data = this.backendService.getDogAncesters(uuid, 5);
+      }
     })
   }
 }

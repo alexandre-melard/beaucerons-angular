@@ -11,7 +11,6 @@ import { Dog } from '../model/dog';
   encapsulation: ViewEncapsulation.None,
 })
 export class DogComponent {
-  uuid!: Observable<string>;
   dog?: Dog;
 
   constructor(
@@ -21,11 +20,9 @@ export class DogComponent {
     route.params.subscribe((val) => {
       // First get the dog uuid from the current route.
       const routeParams = this.route.snapshot.paramMap;
-      this.uuid = new Observable<string>((observer) =>
-        observer.next(String(routeParams.get('uuid')))
-      );
-      // Find the dog that correspond with the uuid provided in route.
-      this.uuid.subscribe((uuid) =>
+      let uuid = routeParams.get('uuid');
+      if (uuid) {
+        // Find the dog that correspond with the uuid provided in route.
         this.backendService.getDogAndParents(uuid).subscribe((dogs) => {
           this.dog = dogs.filter((d) => d.uuid == uuid).pop();
           if (this.dog) {
@@ -38,16 +35,16 @@ export class DogComponent {
               this.dog.dam.type = 'female';
             }
           }
-        })
-      );
+        });
+      }
     });
   }
 
-  getSir(dogs: Dog[], uuid: string): Dog | undefined {
+  getSir(dogs: Dog[], uuid: string | null): Dog | undefined {
     return this.getParent(dogs, 'Male', uuid);
   }
 
-  getDam(dogs: Dog[], uuid: string): Dog | undefined {
+  getDam(dogs: Dog[], uuid: string | null): Dog | undefined {
     return this.getParent(dogs, 'Female', uuid);
   }
 
@@ -55,7 +52,11 @@ export class DogComponent {
     return Math.pow(2, 5 - 1 - c);
   }
 
-  private getParent(dogs: Dog[], type: string, uuid: string): Dog | undefined {
+  private getParent(
+    dogs: Dog[],
+    type: string,
+    uuid: string | null
+  ): Dog | undefined {
     return dogs.filter((d) => d.type == type && d.uuid != uuid).pop();
   }
 }

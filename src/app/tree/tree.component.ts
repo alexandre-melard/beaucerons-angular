@@ -1,5 +1,6 @@
-import { Observable } from 'rxjs';
-import { Component, OnInit, Input } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { Observable, pipe } from 'rxjs';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import * as util from 'zrender/lib/core/util';
 import { Router } from '@angular/router';
 
@@ -8,58 +9,69 @@ import { Router } from '@angular/router';
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.css'],
 })
-export class TreeComponent implements OnInit {
-  options!: Observable<any>;
+export class TreeComponent implements OnChanges {
   @Input() data!: Observable<any>;
+  @Input() depth: number = 5;
+  options!: Observable<any>;
 
   constructor(private router: Router) {
     this.options = new Observable();
   }
 
-  ngOnInit(): void {
-    this.data.subscribe((data: any) => {
-      util.each(
-        data.children,
-        (datum: any, index: any) => (datum.collapsed = false)
+  getOptions(): Observable<any> {
+      return this.data.pipe(
+        map((data) => {
+          util.each(
+            data.children,
+            (datum: any) => (datum.collapsed = false)
+          );
+          return {
+              series: [
+                {
+                  type: 'tree',
+                  data: [data],
+                  top: '1%',
+                  left: '10%',
+                  bottom: '1%',
+                  right: '10%',
+                  symbolSize: 7,
+                  label: {
+                    position: 'left',
+                    verticalAlign: 'middle',
+                    align: 'right',
+                    fontSize: 9,
+                  },
+                  leaves: {
+                    label: {
+                      position: 'right',
+                      verticalAlign: 'middle',
+                      align: 'left',
+                    },
+                  },
+                  initialTreeDepth: this.depth,
+                  expandAndCollapse: false,
+                  animationDuration: 550,
+                  animationDurationUpdate: 750,
+                }
+              ]
+          };
+        })
       );
-      this.options = new Observable((observer) => {
-        observer.next({
-          series: [
-            {
-              type: 'tree',
-              data: [data],
-              top: '1%',
-              left: '10%',
-              bottom: '1%',
-              right: '10%',
-              symbolSize: 7,
-              label: {
-                position: 'left',
-                verticalAlign: 'middle',
-                align: 'right',
-                fontSize: 9,
-              },
-              leaves: {
-                label: {
-                  position: 'right',
-                  verticalAlign: 'middle',
-                  align: 'left',
-                },
-              },
-              initialTreeDepth: 5,
-              expandAndCollapse: false,
-              animationDuration: 550,
-              animationDurationUpdate: 750,
-            },
-          ],
-        });
-      });
-    });
   }
 
-  onChartClick(event: any) {
+  ngOnInit(): void {
+    this.options = this.getOptions();
+  }
+  ngOnChanges(): void {
+    this.options = this.getOptions();
+  }
+
+  chartClick(event: any) {
     if (event.data.link) {
       this.router.navigate([event.data.link]);
     }
+  }
+
+  chartRendered() {
   }
 }

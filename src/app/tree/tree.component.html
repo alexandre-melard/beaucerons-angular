@@ -1,1 +1,1 @@
-<div echarts [options]="options|async" (chartClick)="onChartClick($event)"></div>
+<div echarts [options]="options|async" (chartClick)="chartClick($event)" (chartRendered)="chartRendered()"></div>
