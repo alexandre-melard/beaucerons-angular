@@ -45,7 +45,7 @@ export class BackendService {
   }
 
   /* GET dog with ancesters matching uuid */
-  getDogAncesters(uuid: string, depth=5): Observable<Dog[]> {
+  getDogAncesters(uuid: string, depth=5): Observable<Dog> {
     if (!uuid.trim()) {
       // if not search term, return empty record array.
       console.log(`uuid is empty(${uuid})`);
@@ -59,13 +59,17 @@ export class BackendService {
         this.httpOptions
       )
       .pipe(
-        map((value) => value.result),
+        map((value: DogResult) => {
+          let d = value.result[0];
+          let dog = new Dog(d);
+          return dog;
+        }),
         tap((x) =>
           x
             ? this.log(`found dog matching "${uuid}"`)
             : this.log(`no dog matching "${uuid}"`)
         ),
-        catchError(this.handleError<Dog[]>(`getDog id=${uuid}`))
+        catchError(this.handleError<Dog>(`getDog id=${uuid}`))
       );
   }
 

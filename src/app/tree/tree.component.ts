@@ -1,104 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { Item } from './node/item';
+import { Observable } from 'rxjs';
+import { Component, OnInit, Input } from '@angular/core';
+import * as util from 'zrender/lib/core/util';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tree',
   templateUrl: './tree.component.html',
-  styleUrls: ['./tree.component.css']
+  styleUrls: ['./tree.component.css'],
 })
 export class TreeComponent implements OnInit {
-  tree: Item = {
-    "label": "Irko du murier de Sordeille",
-    "class": "male",
-    "link": "/dogs/id",
-    "parents": [
-      {
-        "label": "Hudson du Fond des Camps",
-        "class": "male",
-        "link": "/dogs/id",
-        "parents": [
-          {
-            "label": "Artzain du Domaine des Gardiens de la Vallee",
-            "class": "male",
-            "link": "/dogs/id",
-            "parents": [
-              {
-                "label": "Seneque de la Dame de Coeur",
-                "class": "male",
-                "link": "/dogs/id"
-              },
-              {
-                "label": "Tara du Gardien de la Puissance",
-                "class": "female",
-                "link": "/dogs/id"
-              }
-            ]
-          },
-          {
-            "label": "Vanille",
-            "class": "female",
-            "link": "/dogs/id",
-            "parents": [
-              {
-                "label": "Rick des Hautes Ruelles",
-                "class": "male",
-                "link": "/dogs/id"
-              },
-              {
-                "label": "Silk",
-                "class": "female",
-                "link": "/dogs/id"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "label": "Feeling du Fond des Camps",
-        "class": "female",
-        "link": "/dogs/id",
-        "parents": [
-          {
-            "label": "Udson du Murier de Sordeille",
-            "class": "male",
-            "link": "/dogs/id",
-            "parents": [
-              {
-                "label": "Paisley du Pla de la Jasse",
-                "class": "male",
-                "link": "/dogs/id"
-              },
-              {
-                "label": "O'Lara du Murier de Sordeille",
-                "class": "female",
-                "link": "/dogs/id"
-              }
-            ]
-          },
-          {
-            "label": "Voltane",
-            "class": "female",
-            "link": "/dogs/id",
-            "parents": [{
-              "label": "Rick des Hautes Ruelles",
-              "class": "male",
-              "link": "/dogs/id"
-            },
-            {
-              "label": "Silk",
-              "class": "female",
-              "link": "/dogs/id"
-            }
-            ]
-          }
-        ]
-      }
-    ]
-  };
+  options!: Observable<any>;
+  @Input() data!: Observable<any>;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private router: Router) {
+    this.options = new Observable();
   }
 
+  ngOnInit(): void {
+    this.data.subscribe((data: any) => {
+      util.each(
+        data.children,
+        (datum: any, index: any) => (datum.collapsed = false)
+      );
+      this.options = new Observable((observer) => {
+        observer.next({
+          series: [
+            {
+              type: 'tree',
+              data: [data],
+              top: '1%',
+              left: '10%',
+              bottom: '1%',
+              right: '10%',
+              symbolSize: 7,
+              label: {
+                position: 'left',
+                verticalAlign: 'middle',
+                align: 'right',
+                fontSize: 9,
+              },
+              leaves: {
+                label: {
+                  position: 'right',
+                  verticalAlign: 'middle',
+                  align: 'left',
+                },
+              },
+              initialTreeDepth: 5,
+              expandAndCollapse: false,
+              animationDuration: 550,
+              animationDurationUpdate: 750,
+            },
+          ],
+        });
+      });
+    });
+  }
+
+  onChartClick(event: any) {
+    if (event.data.link) {
+      this.router.navigate([event.data.link]);
+    }
+  }
 }

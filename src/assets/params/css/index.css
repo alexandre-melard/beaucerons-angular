@@ -1,98 +1,97 @@
 *, *:before, *:after {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  
-  .tree {
-    position: relative;
-  }
-  
-  .tree li{
-    list-style: none;
-    position: relative;
-    min-height: 60px;
-  }
-  
-  .tree ul{
-      padding-left:0;
-  }
-  
-  .tree ul {
-    position: relative;
-    margin-left: 250px;
-  }
-  .tree ul:before {
-    content: "";
-    width: 50px;
-    border-top: 2px solid #eee9dc;
-    position: absolute;
-    left: -100px;
-    top: 50%;
-    margin-top: 1px;
-  }
-  
-  .tree li:before {
-    content: "";
-    height: 100%;
-    border-left: 2px solid #eee9dc;
-    position: absolute;
-    left: -50px;
-  }
-  .tree li:after {
-    content: "";
-    width: 50px;
-    border-top: 2px solid #eee9dc;
-    position: absolute;
-    left: -50px;
-    top: 50%;
-    margin-top: 1px;
-  }
-  .tree li:first-child:before {
-    width: 10px;
-    height: 50%;
-    top: 50%;
-    margin-top: 2px;
-    border-radius: 10px 0 0 0;
-  }
-  .tree li:first-child:after {
-    height: 10px;
-    border-radius: 10px 0 0 0;
-  }
-  .tree li:last-child:before {
-    width: 10px;
-    height: 50%;
-    border-radius: 0 0 0 10px;
-  }
-  .tree li:last-child:after {
-    height: 10px;
-    border-top: none;
-    border-bottom: 2px solid #eee9dc;
-    border-radius: 0 0 0 10px;
-    margin-top: -9px;
-  }
-  
-  .tree span {
-    display: block;
-    min-width: 150px;
-    padding: 5px 10px;
-    line-height: 20px;
-    text-align: center;
-    border: 2px solid #eee9dc;
-    border-radius: 5px;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    margin-top: -15px;
-    font-size: small;
-    width: 150px;
-  }
-  
-  span.male {
-    color: darkblue;
-  }
-  
-  span.female {
-    color: rgb(207, 20, 114);
-  }
-  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.tree {
+  position: relative;
+}
+
+.tree li{
+  list-style: none;
+  position: relative;
+  min-height: 80px;
+}
+
+.tree ul{
+    padding-left:0;
+}
+
+.tree ul {
+  position: relative;
+  margin-left: 250px;
+}
+.tree ul:before {
+  content: "";
+  width: 50px;
+  border-top: 2px solid #eee9dc;
+  position: absolute;
+  left: -100px;
+  top: 50%;
+  margin-top: 1px;
+}
+
+.tree li:before {
+  content: "";
+  height: 100%;
+  border-left: 2px solid #eee9dc;
+  position: absolute;
+  left: -50px;
+}
+.tree li:after {
+  content: "";
+  width: 50px;
+  border-top: 2px solid #eee9dc;
+  position: absolute;
+  left: -50px;
+  top: 50%;
+  margin-top: 1px;
+}
+.tree li:first-child:before {
+  width: 10px;
+  height: 50%;
+  top: 50%;
+  margin-top: 2px;
+  border-radius: 10px 0 0 0;
+}
+.tree li:first-child:after {
+  height: 10px;
+  border-radius: 10px 0 0 0;
+}
+.tree li:last-child:before {
+  width: 10px;
+  height: 50%;
+  border-radius: 0 0 0 10px;
+}
+.tree li:last-child:after {
+  height: 10px;
+  border-top: none;
+  border-bottom: 2px solid #eee9dc;
+  border-radius: 0 0 0 10px;
+  margin-top: -9px;
+}
+
+.tree span {
+  display: block;
+  min-width: 150px;
+  padding: 5px 10px;
+  line-height: 20px;
+  text-align: center;
+  border: 2px solid #eee9dc;
+  border-radius: 5px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -15px;
+  font-size: small;
+  width: 150px;
+}
+
+span.male {
+  color: darkblue;
+}
+
+span.female {
+  color: rgb(207, 20, 114);
+}

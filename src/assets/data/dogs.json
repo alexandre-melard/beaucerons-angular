@@ -1,0 +1,83 @@
+{
+  "name": "Irko du murier de Sordeille",
+  "class": "male",
+  "link": "/dogs/id",
+  "children": [{
+      "name": "Hudson du Fond des Camps",
+      "class": "male",
+      "link": "/dogs/id",
+      "children": [{
+          "name": "Artzain du Domaine des Gardiens de la Vallee",
+          "class": "male",
+          "link": "/dogs/id",
+          "children": [{
+              "name": "Seneque de la Dame de Coeur",
+              "class": "male",
+              "link": "/dogs/id"
+            },
+            {
+              "name": "Tara du Gardien de la Puissance",
+              "class": "female",
+              "link": "/dogs/id"
+            }
+          ]
+        },
+        {
+          "name": "Vanille",
+          "class": "female",
+          "link": "/dogs/id",
+          "children": [{
+              "name": "Rick des Hautes Ruelles",
+              "class": "male",
+              "link": "/dogs/id"
+            },
+            {
+              "name": "Silk",
+              "class": "female",
+              "link": "/dogs/id"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Feeling du Fond des Camps",
+      "class": "female",
+      "link": "/dogs/id",
+      "children": [{
+          "name": "Udson du Murier de Sordeille",
+          "class": "male",
+          "link": "/dogs/id",
+          "children": [
+            {
+              "name": "Paisley du Pla de la Jasse",
+              "class": "male",
+              "link": "/dogs/id"
+            },
+            {
+              "name": "O'Lara du Murier de Sordeille",
+              "class": "female",
+              "link": "/dogs/id"
+            }
+          ]
+        },
+        {
+          "name": "Voltane",
+          "class": "female",
+          "link": "/dogs/id",
+          "children": [{
+              "name": "Rick des Hautes Ruelles",
+              "class": "male",
+              "link": "/dogs/id"
+            },
+            {
+              "name": "Silk",
+              "class": "female",
+              "link": "/dogs/id"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
+import { TreeComponent } from './tree/tree.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-
-import { AppComponent } from './app.component';
-import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { FooterComponent } from './footer/footer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthModule } from '@auth0/auth0-angular';
-import { AuthButtonComponent } from './auth-button/auth-button.component';
 import { HttpClientModule } from '@angular/common/http';
 import {
   NgcCookieConsentModule,
@@ -16,12 +12,35 @@ import {
 } from 'ngx-cookieconsent';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { NgxEchartsModule } from 'ngx-echarts';
+
+import { AppComponent } from './app.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { FooterComponent } from './footer/footer.component';
+import { AuthButtonComponent } from './auth-button/auth-button.component';
 import { SearchComponent } from './search/search.component';
 import { DogDetailsComponent } from './dog-details/dog-details.component';
 import { DogComponent } from './dog/dog.component';
-import { TreeComponent } from './tree/tree.component';
-import { NodeComponent } from './tree/node/node.component';
+import { PedigreeComponent } from './dog/pedigree/pedigree.component';
 
+import * as echarts from 'echarts/core';
+import { LineChart } from 'echarts/charts';
+import {
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+} from 'echarts/components';
+// Import the Canvas renderer, note that introducing the CanvasRenderer or SVGRenderer is a required step
+import { CanvasRenderer } from 'echarts/renderers';
+import 'echarts/theme/macarons.js';
+
+echarts.use([
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  LineChart,
+  CanvasRenderer,
+]);
 const cookieConfig: NgcCookieConsentConfig = {
   cookie: {
     domain: 'localhost', // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
@@ -50,11 +69,12 @@ const cookieConfig: NgcCookieConsentConfig = {
 @NgModule({
   imports: [
     BrowserModule,
+    NgxEchartsModule.forRoot({ echarts }),
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: AppComponent },
       { path: 'dog/:uuid', component: DogComponent },
-      { path: 'tree', component: TreeComponent },
+      { path: 'dog/:uuid/pedigree', component: PedigreeComponent },
     ]),
     NgbModule,
     AuthModule.forRoot({
@@ -74,8 +94,8 @@ const cookieConfig: NgcCookieConsentConfig = {
     SearchComponent,
     DogDetailsComponent,
     DogComponent,
+    PedigreeComponent,
     TreeComponent,
-    NodeComponent,
   ],
   bootstrap: [AppComponent],
 })

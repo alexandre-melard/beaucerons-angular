@@ -1,3 +1,1 @@
-<div class="tree">
-    <app-node [item]="tree" [branch]="false"></app-node>
-</div>
+<div echarts [options]="options|async" (chartClick)="onChartClick($event)"></div>

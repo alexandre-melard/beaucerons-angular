@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { TreeComponent } from './tree.component';
+import { PedigreeComponent } from './pedigree.component';
 
-describe('TreeComponent', () => {
-  let component: TreeComponent;
-  let fixture: ComponentFixture<TreeComponent>;
+describe('PedigreeComponent', () => {
+  let component: PedigreeComponent;
+  let fixture: ComponentFixture<PedigreeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TreeComponent ]
+      declarations: [ PedigreeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreeComponent);
+    fixture = TestBed.createComponent(PedigreeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
