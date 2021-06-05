@@ -1,0 +1,26 @@
+[
+	{
+		"{name=Scotch du Chantain, uuid=df9a7710-adc2-4392-9a32-ef1c3c435c7f}": {
+			"{name=Rock de la Roche Saint Secret, uuid=4f31b07c-7b32-44b3-b85c-6b83826562ba}": {
+				"{name=Johann, uuid=3742d662-e3ef-4864-b0bf-f3446d102d05}": {
+					"{name=Idylle du Clos des Hortioux, uuid=76f626bd-3719-4f3d-8f14-1cbd50f6a0d6}": {},
+					"{name=Jeremi, uuid=2cf1d429-f31e-4338-84ed-60010cb1a22a}": {}
+				},
+				"{name=Judy de la Trottiere, uuid=1f248822-a08b-433c-a7de-7304bd020b1d}": {
+					"{name=Tenor du Val du Tremblay, uuid=f15750ca-15b2-4141-b204-fe43f7fde7ff}": {},
+					"{name=Tosca de la Trottiere , uuid=02cca004-971e-428b-a0a9-da0f18799c56}": {}
+				}
+			},
+			"{name=Praline , uuid=afba5064-0989-44ac-84af-55c93c10a90c}": {
+				"{name=Unis de Valponay, uuid=2127d0d7-ddfc-4075-a0fe-7dd936a06200}": {
+					"{name=Toy de Bellemour, uuid=11d1beda-916f-4338-a579-b5572bb8df70}": {},
+					"{name=Texanne , uuid=0df79693-cba8-4eb4-86b0-dc2b59b36c93}": {}
+				},
+				"{name=Madame de Valponay, uuid=41742f42-bb8b-47da-b1b7-6271666e30a2}": {
+					"{name=Vilna , uuid=15b5f55b-6097-4c41-96cc-fc8f0852dc75}": {},
+					"{name=Snobi , uuid=17e1b102-c457-4aa2-bfcc-186423e9be34}": {}
+				}
+			}
+		}
+	}
+]

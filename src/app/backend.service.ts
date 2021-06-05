@@ -20,32 +20,30 @@ export class BackendService {
 
   constructor(private http: HttpClient) {}
 
-  private getParents(generations: number, current?: number): string {
-    let curr;
-    if(!current) {
-      current = 1;
-    } else {
-      curr = current+1;
-    }
-    if (current < generations) {
-      return `project('name', 'uuid', 'sir', 'dam').
-      by('name').
-      by('uuid').
-      by(inE('Parent').has('type', 'FATHER').
-        outV().
-        ${this.getParents(generations, curr)}
-      ).
-      by(inE('Parent').has('type', 'MOTHER').
-        outV().
-        ${this.getParents(generations, curr)}
-      )`
-    } else {
-      return `project('name', 'uuid').by('name').by('uuid')`;
-    }
+  /* GET dog with ancesters matching uuid */
+  getDogPedigreeFromJson(): Observable<Dog> {
+    return this.http.get<any>('assets/data/data.json').pipe(
+      map((value) => {
+        let txt = JSON.stringify(value);
+        txt = txt.replace(/"/g, '');
+        txt = txt.replace(/}:{{/g, ', "children": [{');
+        txt = txt.replace(/\[{{/g, '{');
+        txt = txt.replace(/}}\]/g, '}');
+        txt = txt.replace(/:{}/g, '');
+        txt = txt.replace(/}}/g, '}]}');
+        txt = txt.replace(/}}/g, '}]}');
+        txt = txt.replace(/=/g, ':');
+        txt = txt.replace(/name:/g, '"name":"');
+        txt = txt.replace(/, uuid:([\w-]*)/g, '", "uuid":"$1"');
+        let dog: Dog = JSON.parse(txt);
+        console.log(dog);
+        return dog;
+      })
+    );
   }
 
   /* GET dog with ancesters matching uuid */
-  getDogPedigree(uuid: string, depth=5): Observable<Dog> {
+  getDogOffsprings(uuid: string, depth = 5): Observable<Dog> {
     if (!uuid.trim()) {
       // if not search term, return empty record array.
       console.log(`uuid is empty(${uuid})`);
@@ -55,13 +53,71 @@ export class BackendService {
     return this.http
       .post<DogResult>(
         `${this.backendUrl}/gremlin`,
-        `g.V().has('uuid', '${uuid}').${this.getParents(depth, 1)}`,
+        `g.V().has('uuid', '${uuid}').repeat(timeLimit(3000).out('Parent')).until(outE().count().is(0).or().is(${depth}))tree().by(project('name', 'uuid').by('name').by('uuid'))`,
         this.httpOptions
       )
       .pipe(
         map((value: DogResult) => {
-          let d = value.result[0];
-          let dog = new Dog(d);
+          let txt = JSON.stringify(value.result);
+          txt = txt.replace(/"/g, '');
+          txt = txt.replace(/}:{{/g, ', "children": [{');
+          txt = txt.replace(/\[{{/g, '{');
+          txt = txt.replace(/}}\]/g, '}');
+          txt = txt.replace(/:{}/g, '');
+          txt = txt.replace(/}}/g, '}]}');
+          txt = txt.replace(/}}/g, '}]}');
+          txt = txt.replace(/=/g, ':');
+          txt = txt.replace(/name:/g, '"name":"');
+          txt = txt.replace(/, uuid:([\w-]*)/g, '", "uuid":"$1"');
+          let dog: Dog = JSON.parse(txt);
+          return dog;
+        }),
+        tap((x) =>
+          x
+            ? this.log(`getDogPedigree: found dog matching "${uuid}"`)
+            : this.log(`getDogPedigree: no dog matching "${uuid}"`)
+        ),
+        catchError(this.handleError<Dog>(`getDog id=${uuid}`))
+      );
+  }
+  /* GET dog with ancesters matching uuid */
+  getDogPedigree(uuid: string, depth = 5): Observable<Dog> {
+    if (!uuid.trim()) {
+      // if not search term, return empty record array.
+      console.log(`uuid is empty(${uuid})`);
+      return of();
+    }
+    console.debug(`post select: ${uuid} on url: ${this.backendUrl}/gremlin`);
+    return this.http
+      .post<DogResult>(
+        `${this.backendUrl}/gremlin`,
+        `g.V().has('uuid', '${uuid}').
+        repeat(
+          timeLimit(3000).
+          in('Parent')
+        ).
+        times(${depth}).
+        tree().
+        by(project('name', 'uuid').
+          by('name').
+          by('uuid'))`,
+        //        `g.V().has('uuid', '${uuid}').${this.getParents(depth, 1)}`,
+        this.httpOptions
+      )
+      .pipe(
+        map((value: DogResult) => {
+          let txt = JSON.stringify(value.result);
+          txt = txt.replace(/"/g, '');
+          txt = txt.replace(/}:{{/g, ', "children": [{');
+          txt = txt.replace(/\[{{/g, '{');
+          txt = txt.replace(/}}\]/g, '}');
+          txt = txt.replace(/:{}/g, '');
+          txt = txt.replace(/}}/g, '}]}');
+          txt = txt.replace(/}}/g, '}]}');
+          txt = txt.replace(/=/g, ':');
+          txt = txt.replace(/name:/g, '"name":"');
+          txt = txt.replace(/, uuid:([\w-]*)/g, '", "uuid":"$1", "link":"/dog/$1"');
+          let dog: Dog = JSON.parse(txt);
           return dog;
         }),
         tap((x) =>

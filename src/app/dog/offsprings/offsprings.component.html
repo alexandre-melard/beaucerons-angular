@@ -1,4 +1,4 @@
-<app-tree class="pedigree" [data]="data|async" [depth]="depth" [height]="getHeightValues(depth)"></app-tree>
+<app-treemap class="offsprings" [data]="data|async" [depth]="depth" [height]="getHeightValues(depth)"></app-treemap>
 <div class="btn-toolbar justify-content-md-end" role="toolbar" aria-label="Toolbar with button groups">
   <div class="btn-group btn-group-sm" role="group">
     <button *ngFor="let depthValue of depthValues" type="button" class="btn btn-light"

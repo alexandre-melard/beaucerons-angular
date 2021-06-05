@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { LittersComponent } from './litters.component';
+import { TreemapComponent } from './treemap.component';
 
-describe('LittersComponent', () => {
-  let component: LittersComponent;
-  let fixture: ComponentFixture<LittersComponent>;
+describe('TreemapComponent', () => {
+  let component: TreemapComponent;
+  let fixture: ComponentFixture<TreemapComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LittersComponent ]
+      declarations: [ TreemapComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LittersComponent);
+    fixture = TestBed.createComponent(TreemapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

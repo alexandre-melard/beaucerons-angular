@@ -1,5 +1,8 @@
+import { TreemapComponent } from './echarts/treemap/treemap.component';
+import { RadialComponent } from './echarts/radial/radial.component';
+import { OffspringsComponent } from './dog/offsprings/offsprings.component';
 import { NgModule } from '@angular/core';
-import { TreeComponent } from './tree/tree.component';
+import { TreeComponent } from './echarts/tree/tree.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -95,7 +98,10 @@ const cookieConfig: NgcCookieConsentConfig = {
     DogDetailsComponent,
     DogComponent,
     PedigreeComponent,
+    OffspringsComponent,
     TreeComponent,
+    TreemapComponent,
+    RadialComponent,
   ],
   bootstrap: [AppComponent],
 })

@@ -1,31 +1,25 @@
 import { Dog } from './../../model/dog';
 import { BackendService } from './../../backend.service';
 import { Observable } from 'rxjs';
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 @Component({
-  selector: 'app-pedigree',
-  templateUrl: './pedigree.component.html',
-  styleUrls: ['./pedigree.component.css'],
+  selector: 'app-offsprings',
+  templateUrl: './offsprings.component.html',
+  styleUrls: ['./offsprings.component.css']
 })
-export class PedigreeComponent implements OnInit, OnChanges {
+export class OffspringsComponent implements OnInit, OnChanges {
   @Input() uuid!: string;
   data!: Observable<Dog>;
-  depth = 3;
+  depth = 1;
   depthValues?: any;
   depthMap = new Map([
-    [2, 200],
-    [3, 300],
-    [4, 500],
-    [5, 700],
-    [6, 1200],
-    [7, 2000],
+    [1, 1296],
+    [2, 1296],
+    [3, 1296],
+    [4, 1296],
+    [5, 1296],
+    [6, 1296],
   ]);
 
   constructor(private backendService: BackendService) {
@@ -33,7 +27,7 @@ export class PedigreeComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.data = this.getPedigreeData();
+    this.data = this.getOffspringsData();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -41,16 +35,15 @@ export class PedigreeComponent implements OnInit, OnChanges {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'uuid': {
-            this.data = this.getPedigreeData();
+            this.data = this.getOffspringsData();
           }
         }
       }
     }
   }
 
-  private getPedigreeData(): Observable<any> {
-//    return this.backendService.getDogPedigreeFromJson();
-    return this.backendService.getDogPedigree(this.uuid, 8);
+  private getOffspringsData(): Observable<any> {
+    return this.backendService.getDogOffsprings(this.uuid, 8);
   }
 
   getHeightValues(depth: number): number | undefined {

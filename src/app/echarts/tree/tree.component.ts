@@ -1,3 +1,4 @@
+import { Echarts } from './../echarts';
 import {
   Component,
   Input,
@@ -13,13 +14,14 @@ import { Router } from '@angular/router';
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.css'],
 })
-export class TreeComponent implements OnChanges, OnInit {
+export class TreeComponent extends Echarts implements OnChanges, OnInit {
   @Input() data!: any;
   @Input() depth: number = 5;
   @Input() height?: number = 500;
-  options!: any;
 
-  constructor(private router: Router) {}
+  constructor(protected router: Router) {
+    super(router);
+  }
 
   getOptions(): any {
     if (!this.data) {
@@ -29,26 +31,55 @@ export class TreeComponent implements OnChanges, OnInit {
       util.each(this.data.children, (datum: any) => (datum.collapsed = false));
     }
     return {
+      title: {
+        left: '0',
+        bottom: '0',
+        subtext:
+          "Click on the dog's name to show or hide it's parents.\nPress CTRL+Click on the dog's name to go to it's page.",
+        subtextStyle: {
+          fontStyle: 'italic',
+        },
+      },
+      tooltip: {
+        formatter: (params: any) => {
+          let txt = `<strong>${params.data.name}</strong><p>`;
+          if (params.data.children) {
+            txt += 'Click to show or hide his parents.';
+          }
+          if (params.data.link) {
+            txt += `<br>Press CTRL+Click to go to <br><i>${params.data.link}</i>.`;
+          }
+          return txt;
+        }
+
+      },
       series: [
         {
           type: 'tree',
           data: [this.data],
           top: '1%',
-          left: '10%',
+          left: '14%',
           bottom: '1%',
           right: '10%',
           symbolSize: 7,
+          emphasis: {
+            focus: 'descendant',
+          },
           label: {
             position: 'left',
             verticalAlign: 'middle',
             align: 'right',
-            fontSize: 9,
+            fontSize: 11,
           },
           leaves: {
             label: {
               position: 'right',
               verticalAlign: 'middle',
               align: 'left',
+              formatter: (params: any) =>
+                params.data.name.length > 20
+                  ? `${params.data.name.substring(0, 20)}...`
+                  : params.data.name,
             },
           },
           initialTreeDepth: this.depth,
@@ -61,28 +92,10 @@ export class TreeComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    this.options = this.getOptions();
+    this.init();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    for (const propName in changes) {
-      if (changes.hasOwnProperty(propName) && changes[propName].currentValue) {
-        switch (propName) {
-          case 'data':
-          case 'depth': {
-            this.options = this.getOptions();
-            break;
-          }
-        }
-      }
-    }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.update(changes);
   }
-
-  chartClick(event: any) {
-    if (event.data.link) {
-      this.router.navigate([event.data.link]);
-    }
-  }
-
-  chartRendered() {}
 }
