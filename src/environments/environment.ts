@@ -12,7 +12,7 @@ export const environment = {
     fontawesome: 'Font Awesome 5.15.3',
   },
   backend: {
-    url: 'http://localhost:4200/command/beaucerons',
+    url: 'http://localhost:4200',
   }
 };
 

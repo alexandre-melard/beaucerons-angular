@@ -1,14 +1,15 @@
 <form>
   <div class="input-group">
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='goToRoute($event.option.value)' [displayWith]="displayRecord">
-      <mat-option *ngFor="let record of filteredRecords$ | async" [value]="record">
-        [{{record.type | slice:0:1}}] {{record.name}}
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='goToRoute($event.option.value)'
+      [displayWith]="displayRecord">
+      <mat-option [class]="record.type|lowercase" *ngFor="let record of filteredRecords$ | async" [value]="record">
+        <span class="value">{{record.name}}</span>
+        <span class="type">{{record.type}}</span>
       </mat-option>
     </mat-autocomplete>
     <input #searchBox type="text" class="form-control" placeholder="Dog name, id, breeder, owner..." aria-label="search"
-      aria-describedby="button-search" (input)="search(searchBox.value)" [matAutocomplete]="auto" >
-    <button class="btn btn-outline-secondary" type="button" id="button-search"> <i
-        class="fas fa-search mr-1"></i>
+      aria-describedby="button-search" (input)="search(searchBox.value)" [matAutocomplete]="auto">
+    <button class="btn btn-outline-secondary" type="button" id="button-search"> <i class="fas fa-search mr-1"></i>
     </button>
   </div>
 </form>

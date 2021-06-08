@@ -1,7 +1,7 @@
-import { BackendService } from '../backend.service';
+import { BackendService } from '../../backend.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Dog } from '../model/dog';
+import { Dog } from '../dog';
 import { Input } from '@angular/core';
 
 @Component({

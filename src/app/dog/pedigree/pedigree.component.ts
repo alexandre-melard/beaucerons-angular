@@ -1,4 +1,4 @@
-import { Dog } from './../../model/dog';
+import { Dog } from '../dog';
 import { BackendService } from './../../backend.service';
 import { Observable } from 'rxjs';
 import {
@@ -16,7 +16,7 @@ import {
 })
 export class PedigreeComponent implements OnInit, OnChanges {
   @Input() uuid!: string;
-  data!: Observable<Dog>;
+  data$!: Observable<Dog>;
   depth = 3;
   depthValues?: any;
   depthMap = new Map([
@@ -33,7 +33,7 @@ export class PedigreeComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.data = this.getPedigreeData();
+    this.data$ = this.getPedigreeData();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -41,7 +41,7 @@ export class PedigreeComponent implements OnInit, OnChanges {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'uuid': {
-            this.data = this.getPedigreeData();
+            this.data$ = this.getPedigreeData();
           }
         }
       }

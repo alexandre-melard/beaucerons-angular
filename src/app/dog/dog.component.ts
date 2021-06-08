@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { BackendService } from './../backend.service';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Dog } from '../model/dog';
+import { Dog } from './dog';
 
 @Component({
   selector: 'app-dog',
@@ -24,18 +24,20 @@ export class DogComponent {
 
       if (uuid) {
         // Find the dog that correspond with the uuid provided in route.
-        this.backendService.getDogAndParents(uuid).subscribe((dogs) => {
-          this.dog = dogs.filter((d) => d.uuid == uuid).pop();
-          if (this.dog) {
-            this.dog.sir = this.getSir(dogs, uuid);
-            if (this.dog.sir) {
-              this.dog.sir.type = 'male';
+        this.backendService.getDog(uuid).subscribe((dog) => {
+          this.dog = dog;
+          this.backendService.getDogParents(dog.uuid).subscribe((dogs) => {
+            if (this.dog) {
+              this.dog.sir = this.getSir(dogs, dog.uuid);
+              if (this.dog.sir) {
+                this.dog.sir.type = 'male';
+              }
+              this.dog.dam = this.getDam(dogs, dog.uuid);
+              if (this.dog.dam) {
+                this.dog.dam.type = 'female';
+              }
             }
-            this.dog.dam = this.getDam(dogs, uuid);
-            if (this.dog.dam) {
-              this.dog.dam.type = 'female';
-            }
-          }
+          });
         });
       }
     });

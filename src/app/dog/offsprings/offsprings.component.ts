@@ -1,4 +1,4 @@
-import { Dog } from './../../model/dog';
+import { Dog } from '../dog';
 import { BackendService } from './../../backend.service';
 import { Observable } from 'rxjs';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
@@ -10,7 +10,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 })
 export class OffspringsComponent implements OnInit, OnChanges {
   @Input() uuid!: string;
-  data!: Observable<Dog>;
+  data$!: Observable<Dog>;
   depth = 1;
   depthValues?: any;
   depthMap = new Map([
@@ -27,7 +27,7 @@ export class OffspringsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.data = this.getOffspringsData();
+    this.data$ = this.getOffspringsData();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -35,7 +35,7 @@ export class OffspringsComponent implements OnInit, OnChanges {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'uuid': {
-            this.data = this.getOffspringsData();
+            this.data$ = this.getOffspringsData();
           }
         }
       }

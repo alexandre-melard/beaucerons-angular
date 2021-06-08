@@ -1,20 +1,16 @@
-import { SearchResult } from './search/search-result';
-import { AuthService } from '@auth0/auth0-angular';
-import { DogResult } from './model/dog-result';
 import { environment } from '../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 import { Record } from './search/record';
-import { Dog } from './model/dog';
+import { Dog } from './dog/dog';
 
 @Injectable({ providedIn: 'root' })
 export class BackendService {
   private backendUrl = environment.backend.url;
-  private accessToken?: string;
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -26,29 +22,7 @@ export class BackendService {
   constructor(private http: HttpClient) {}
 
   /* GET dog with ancesters matching uuid */
-  getDogPedigreeFromJson(): Observable<Dog> {
-    return this.http.get<any>('assets/data/data.json').pipe(
-      map((value) => {
-        let txt = JSON.stringify(value);
-        txt = txt.replace(/"/g, '');
-        txt = txt.replace(/}:{{/g, ', "children": [{');
-        txt = txt.replace(/\[{{/g, '{');
-        txt = txt.replace(/}}\]/g, '}');
-        txt = txt.replace(/:{}/g, '');
-        txt = txt.replace(/}}/g, '}]}');
-        txt = txt.replace(/}}/g, '}]}');
-        txt = txt.replace(/=/g, ':');
-        txt = txt.replace(/name:/g, '"name":"');
-        txt = txt.replace(/, uuid:([\w-]*)/g, '", "uuid":"$1"');
-        let dog: Dog = JSON.parse(txt);
-        console.log(dog);
-        return dog;
-      })
-    );
-  }
-
-  /* GET dog with ancesters matching uuid */
-  getDogOffsprings(uuid: string, depth = 5): Observable<Dog> {
+  getDogOffsprings(uuid: string, depth = 3): Observable<Dog> {
     if (!uuid.trim()) {
       // if not search term, return empty record array.
       console.log(`uuid is empty(${uuid})`);
@@ -56,30 +30,11 @@ export class BackendService {
     }
     console.debug(`post select: ${uuid} on url: ${this.backendUrl}/gremlin`);
     return this.http
-      .post<DogResult>(
-        `${this.backendUrl}/gremlin`,
-        `g.V().has('uuid', '${uuid}').repeat(timeLimit(3000).out('Parent')).until(outE().count().is(0).or().is(${depth})).tree().by(project('name', 'uuid').by('name').by('uuid'))`,
+      .get<Dog>(
+        `${this.backendUrl}/api/dog/${uuid}/offsprings/${depth}`,
         this.httpOptions
       )
       .pipe(
-        map((value: any) => {
-          let txt = JSON.stringify(value.result);
-          txt = txt.replace(/"/g, '');
-          txt = txt.replace(/}:{{/g, ', "children": [{');
-          txt = txt.replace(/\[{{/g, '{');
-          txt = txt.replace(/}}\]/g, '}');
-          txt = txt.replace(/:{}/g, '');
-          txt = txt.replace(/}}/g, '}]}');
-          txt = txt.replace(/}}/g, '}]}');
-          txt = txt.replace(/=/g, ':');
-          txt = txt.replace(/name:/g, '"name":"');
-          txt = txt.replace(
-            /, uuid:([\w-]*)/g,
-            '", "uuid":"$1", "link":"/dog/$1"'
-          );
-          let dog: Dog = JSON.parse(txt);
-          return dog;
-        }),
         tap((x) =>
           x
             ? this.log(`getDogPedigree: found dog matching "${uuid}"`)
@@ -97,40 +52,11 @@ export class BackendService {
     }
     console.debug(`post select: ${uuid} on url: ${this.backendUrl}/gremlin`);
     return this.http
-      .post<DogResult>(
-        `${this.backendUrl}/gremlin`,
-        `g.V().has('uuid', '${uuid}').
-        repeat(
-          timeLimit(3000).
-          in('Parent')
-        ).
-        times(${depth}).
-        tree().
-        by(project('name', 'uuid').
-          by('name').
-          by('uuid'))`,
-        //        `g.V().has('uuid', '${uuid}').${this.getParents(depth, 1)}`,
+      .get<Dog>(
+        `${this.backendUrl}/api/dog/${uuid}/pedigree/${depth}`,
         this.httpOptions
       )
       .pipe(
-        map((value: any) => {
-          let txt = JSON.stringify(value.result);
-          txt = txt.replace(/"/g, '');
-          txt = txt.replace(/}:{{/g, ', "children": [{');
-          txt = txt.replace(/\[{{/g, '{');
-          txt = txt.replace(/}}\]/g, '}');
-          txt = txt.replace(/:{}/g, '');
-          txt = txt.replace(/}}/g, '}]}');
-          txt = txt.replace(/}}/g, '}]}');
-          txt = txt.replace(/=/g, ':');
-          txt = txt.replace(/name:/g, '"name":"');
-          txt = txt.replace(
-            /, uuid:([\w-]*)/g,
-            '", "uuid":"$1", "link":"/dog/$1"'
-          );
-          let dog: Dog = JSON.parse(txt);
-          return dog;
-        }),
         tap((x) =>
           x
             ? this.log(`getDogPedigree: found dog matching "${uuid}"`)
@@ -141,22 +67,18 @@ export class BackendService {
   }
 
   /* GET dog with parents matching uuid */
-  getDogAndParents(uuid: string, limit = 20): Observable<Dog[]> {
+  getDogParents(uuid: string): Observable<Dog[]> {
     if (!uuid.trim()) {
       // if not search term, return empty record array.
       console.log(`uuid is empty(${uuid})`);
       return of();
     }
-    console.debug(`post select: ${uuid} on url: ${this.backendUrl}`);
-
     return this.http
-      .post<DogResult>(
-        `${this.backendUrl}/sql`,
-        `select @RID as id, @CLASS as type, name, uuid, ship, tattoo, cotation, dob, color, other from (traverse in('Parent') from (select @RID from Dog where uuid='${uuid}') while $depth < 2)`,
+      .get<Dog[]>(
+        `${this.backendUrl}/api/dog/${uuid}/parents`,
         this.httpOptions
       )
       .pipe(
-        map((value: any) => value.result),
         tap((x) =>
           x
             ? this.log(`getDogAndParents: found dog matching "${uuid}"`)
@@ -173,17 +95,12 @@ export class BackendService {
       console.log(`uuid is empty(${uuid})`);
       return of();
     }
-    console.debug(`post select: ${uuid} on url: ${this.backendUrl}`);
-
     return this.http
-      .post<DogResult>(
-        `${this.backendUrl}/sql`,
-        `SELECT @RID as id, @CLASS as type, name, uuid, ship, tattoo, cotation, dob, color, other FROM Dog  WHERE uuid = '${uuid}' limit ${limit}`,
+      .get<Dog>(
+        `${this.backendUrl}/api/dog/${uuid}`,
         this.httpOptions
       )
       .pipe(
-        map((value: any) => value.result),
-        map((values) => values[0]),
         tap((x) =>
           x
             ? this.log(`getDog: found dog matching "${uuid}"`)
@@ -200,13 +117,11 @@ export class BackendService {
       return of([]);
     }
     return this.http
-      .post<SearchResult>(
-        `${this.backendUrl}/sql`,
-        `SELECT uuid, name, @CLASS as type FROM Named  WHERE SEARCH_CLASS('${term}') = true limit ${limit}`,
+      .post<Record[]>(
+        `${this.backendUrl}/api/search/${limit}/${term}`,
         this.httpOptions
       )
       .pipe(
-        map((value) => value.result),
         tap((x) =>
           x.length
             ? this.log(`searchRecords: found records matching "${term}"`)

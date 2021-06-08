@@ -1,3 +1,15 @@
 p {
   text-align: justify;
 }
+
+h1 {
+  position: relative;
+  top: -70px;
+  left: 0px;
+  background-color: rgba(255,255,255,0.7);
+  width: inherit;
+  padding-left: 50px;
+  padding: 10px;
+  font-family: fantasy;
+  font-size: xx-large;
+}

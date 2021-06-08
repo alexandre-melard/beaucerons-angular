@@ -24,7 +24,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { AuthButtonComponent } from './auth-button/auth-button.component';
 import { SearchComponent } from './search/search.component';
-import { DogDetailsComponent } from './dog-details/dog-details.component';
+import { DogDetailsComponent } from './dog/dog-details/dog-details.component';
 import { DogComponent } from './dog/dog.component';
 import { PedigreeComponent } from './dog/pedigree/pedigree.component';
 
