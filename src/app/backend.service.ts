@@ -1,3 +1,5 @@
+import { SearchResult } from './search/search-result';
+import { AuthService } from '@auth0/auth0-angular';
 import { DogResult } from './model/dog-result';
 import { environment } from '../environments/environment';
 import { Injectable } from '@angular/core';
@@ -7,15 +9,18 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Record } from './search/record';
-import { SearchResult } from './search/search-result';
 import { Dog } from './model/dog';
 
 @Injectable({ providedIn: 'root' })
 export class BackendService {
   private backendUrl = environment.backend.url;
+  private accessToken?: string;
 
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      gremlinApi: 'true',
+    }),
   };
 
   constructor(private http: HttpClient) {}
@@ -53,11 +58,11 @@ export class BackendService {
     return this.http
       .post<DogResult>(
         `${this.backendUrl}/gremlin`,
-        `g.V().has('uuid', '${uuid}').repeat(timeLimit(3000).out('Parent')).until(outE().count().is(0).or().is(${depth}))tree().by(project('name', 'uuid').by('name').by('uuid'))`,
+        `g.V().has('uuid', '${uuid}').repeat(timeLimit(3000).out('Parent')).until(outE().count().is(0).or().is(${depth})).tree().by(project('name', 'uuid').by('name').by('uuid'))`,
         this.httpOptions
       )
       .pipe(
-        map((value: DogResult) => {
+        map((value: any) => {
           let txt = JSON.stringify(value.result);
           txt = txt.replace(/"/g, '');
           txt = txt.replace(/}:{{/g, ', "children": [{');
@@ -68,7 +73,10 @@ export class BackendService {
           txt = txt.replace(/}}/g, '}]}');
           txt = txt.replace(/=/g, ':');
           txt = txt.replace(/name:/g, '"name":"');
-          txt = txt.replace(/, uuid:([\w-]*)/g, '", "uuid":"$1"');
+          txt = txt.replace(
+            /, uuid:([\w-]*)/g,
+            '", "uuid":"$1", "link":"/dog/$1"'
+          );
           let dog: Dog = JSON.parse(txt);
           return dog;
         }),
@@ -105,7 +113,7 @@ export class BackendService {
         this.httpOptions
       )
       .pipe(
-        map((value: DogResult) => {
+        map((value: any) => {
           let txt = JSON.stringify(value.result);
           txt = txt.replace(/"/g, '');
           txt = txt.replace(/}:{{/g, ', "children": [{');
@@ -116,7 +124,10 @@ export class BackendService {
           txt = txt.replace(/}}/g, '}]}');
           txt = txt.replace(/=/g, ':');
           txt = txt.replace(/name:/g, '"name":"');
-          txt = txt.replace(/, uuid:([\w-]*)/g, '", "uuid":"$1", "link":"/dog/$1"');
+          txt = txt.replace(
+            /, uuid:([\w-]*)/g,
+            '", "uuid":"$1", "link":"/dog/$1"'
+          );
           let dog: Dog = JSON.parse(txt);
           return dog;
         }),
@@ -145,7 +156,7 @@ export class BackendService {
         this.httpOptions
       )
       .pipe(
-        map((value) => value.result),
+        map((value: any) => value.result),
         tap((x) =>
           x
             ? this.log(`getDogAndParents: found dog matching "${uuid}"`)
@@ -171,7 +182,7 @@ export class BackendService {
         this.httpOptions
       )
       .pipe(
-        map((value) => value.result),
+        map((value: any) => value.result),
         map((values) => values[0]),
         tap((x) =>
           x

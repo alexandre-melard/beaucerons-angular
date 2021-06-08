@@ -1,0 +1,12 @@
+{
+  "/command/beaucerons/sql": {
+    "target": "http://node66655-env-5879165.jcloud-ver-jpe.ik-server.com:11347",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/command/beaucerons/gremlin": {
+    "target": "http://node66655-env-5879165.jcloud-ver-jpe.ik-server.com:11347",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

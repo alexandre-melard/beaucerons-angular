@@ -1,3 +1,5 @@
+import { GremlinInterceptor } from './auth/GremlinInterceptor';
+import { Auth0Interceptor } from './auth/Auth0Interceptor';
 import { TreemapComponent } from './echarts/treemap/treemap.component';
 import { RadialComponent } from './echarts/radial/radial.component';
 import { OffspringsComponent } from './dog/offsprings/offsprings.component';
@@ -8,7 +10,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthModule } from '@auth0/auth0-angular';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
   NgcCookieConsentModule,
   NgcCookieConsentConfig,
@@ -104,6 +106,10 @@ const cookieConfig: NgcCookieConsentConfig = {
     RadialComponent,
   ],
   bootstrap: [AppComponent],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: Auth0Interceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: GremlinInterceptor, multi: true },
+  ],
 })
 export class AppModule {}
 
