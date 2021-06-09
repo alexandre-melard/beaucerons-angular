@@ -15,7 +15,8 @@ export class BackendService {
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      gremlinApi: 'true',
+      'beauceronsApi': 'true',
+      'publicApi': 'true'
     }),
   };
 
