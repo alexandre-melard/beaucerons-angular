@@ -15,8 +15,7 @@ export class BackendService {
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'beauceronsApi': 'true',
-      'publicApi': 'true'
+      'api': 'true'
     }),
   };
 
@@ -98,7 +97,7 @@ export class BackendService {
     }
     return this.http
       .get<Dog>(
-        `${this.backendUrl}/api/dog/${uuid}`,
+        `${this.backendUrl}/api/dog/${uuid}/full`,
         this.httpOptions
       )
       .pipe(
@@ -108,6 +107,28 @@ export class BackendService {
             : this.log(`getDog: no dog matching "${uuid}"`)
         ),
         catchError(this.handleError<Dog>(`getDog id=${uuid}`))
+      );
+  }
+
+  /* GET dog matching uuid */
+  confirmDog(uuid: string, person: string): Observable<void> {
+    if (!uuid.trim()) {
+      // if not search term, return empty record array.
+      console.log(`uuid is empty(${uuid})`);
+      return of();
+    }
+    if (!person.trim()) {
+      // if not search term, return empty record array.
+      console.log(`person is empty(${person})`);
+      return of();
+    }
+    return this.http
+      .put<void>(
+        `${this.backendUrl}/api/dog/${uuid}/confirm/${person}`,
+        this.httpOptions
+      )
+      .pipe(
+        catchError(this.handleError<void>(`confirmDog id=${uuid} parent=${person}`))
       );
   }
 

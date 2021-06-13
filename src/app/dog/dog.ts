@@ -1,6 +1,9 @@
+import { Breeder } from './../person/breeder/Owner';
+import { Owner } from './../person/owner/Owner';
 export class Dog {
   id?: string;
   type!: string;
+  verified!: string;
   name!: string;
   uuid!: string;
   ship?: string;
@@ -11,6 +14,8 @@ export class Dog {
   other?: string;
   sir?: Dog;
   dam?: Dog;
+  owner?: Owner;
+  breeder?: Breeder;
   children?: Dog[];
   link = `/dog/${this.uuid}`;
 }

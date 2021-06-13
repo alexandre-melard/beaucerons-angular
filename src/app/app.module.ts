@@ -1,5 +1,5 @@
-import { GremlinInterceptor } from './auth/GremlinInterceptor';
-import { Auth0Interceptor } from './auth/Auth0Interceptor';
+import { cookies } from './cookies';
+import { environment } from './../environments/environment';
 import { TreemapComponent } from './echarts/treemap/treemap.component';
 import { RadialComponent } from './echarts/radial/radial.component';
 import { OffspringsComponent } from './dog/offsprings/offsprings.component';
@@ -9,14 +9,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AuthModule } from '@auth0/auth0-angular';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
-  NgcCookieConsentModule,
-  NgcCookieConsentConfig,
-} from 'ngx-cookieconsent';
+  AuthModule,
+  AuthHttpInterceptor,
+  AuthGuard,
+} from '@auth0/auth0-angular';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgcCookieConsentModule } from 'ngx-cookieconsent';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 import { AppComponent } from './app.component';
@@ -25,51 +28,12 @@ import { FooterComponent } from './footer/footer.component';
 import { AuthButtonComponent } from './auth-button/auth-button.component';
 import { SearchComponent } from './search/search.component';
 import { DogDetailsComponent } from './dog/dog-details/dog-details.component';
+import { DogDetailsConfirmComponent, DogDetailsConfirmDialogComponent } from './dog/dog-details/dog-details-confirm/dog-details-confirm.component';
 import { DogComponent } from './dog/dog.component';
 import { PedigreeComponent } from './dog/pedigree/pedigree.component';
 
 import * as echarts from 'echarts/core';
-import { LineChart } from 'echarts/charts';
-import {
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-} from 'echarts/components';
-// Import the Canvas renderer, note that introducing the CanvasRenderer or SVGRenderer is a required step
-import { CanvasRenderer } from 'echarts/renderers';
 import 'echarts/theme/macarons.js';
-
-echarts.use([
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  LineChart,
-  CanvasRenderer,
-]);
-const cookieConfig: NgcCookieConsentConfig = {
-  cookie: {
-    domain: 'localhost', // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
-  },
-  palette: {
-    popup: {
-      background: '#000',
-    },
-    button: {
-      background: '#f1d600',
-    },
-  },
-  theme: 'edgeless',
-  type: 'opt-out',
-  content: {
-    message:
-      'This website uses cookies to ensure you get the best experience on our website.',
-    dismiss: 'Got it!',
-    deny: 'Refuse cookies',
-    link: 'Learn more',
-    href: 'https://cookiesandyou.com',
-    policy: 'Cookie Policy',
-  },
-};
 
 @NgModule({
   imports: [
@@ -78,18 +42,17 @@ const cookieConfig: NgcCookieConsentConfig = {
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: AppComponent },
-      { path: 'dog/:uuid', component: DogComponent },
-      { path: 'dog/:uuid/pedigree', component: PedigreeComponent },
+      { path: 'dog/:uuid', component: DogComponent, canActivate: [AuthGuard] },
+      { path: 'dog/:uuid/pedigree', component: PedigreeComponent, canActivate: [AuthGuard] },
     ]),
     NgbModule,
-    AuthModule.forRoot({
-      domain: 'beaucerons.eu.auth0.com',
-      clientId: '5AgGMOvuI9gSzLIi3riZGKhimr6V70lb',
-    }),
+    AuthModule.forRoot(environment.auth0),
     HttpClientModule,
-    NgcCookieConsentModule.forRoot(cookieConfig),
+    NgcCookieConsentModule.forRoot(cookies),
     BrowserAnimationsModule,
     MatAutocompleteModule,
+    MatTooltipModule,
+    MatDialogModule,
   ],
   declarations: [
     AppComponent,
@@ -98,6 +61,8 @@ const cookieConfig: NgcCookieConsentConfig = {
     AuthButtonComponent,
     SearchComponent,
     DogDetailsComponent,
+    DogDetailsConfirmComponent,
+    DogDetailsConfirmDialogComponent,
     DogComponent,
     PedigreeComponent,
     OffspringsComponent,
@@ -107,8 +72,7 @@ const cookieConfig: NgcCookieConsentConfig = {
   ],
   bootstrap: [AppComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: Auth0Interceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: GremlinInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
   ],
 })
 export class AppModule {}

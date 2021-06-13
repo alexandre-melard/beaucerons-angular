@@ -1,4 +1,11 @@
-<h2>{{ dog.name }}</h2>
+<h2>
+  <i *ngIf="dog.verified" class="far fa-check-circle" matTooltip="The data has been verified"
+    matTooltipPosition="below"></i>
+  <i *ngIf="!dog.verified" class="far fa-question-circle"
+    matTooltip="The data has not been verified, please help us confirm or correct the data."
+    matTooltipPosition="below"></i>
+  {{ dog.name }}
+</h2>
 <table class="table">
   <tbody>
     <tr *ngIf="dog.type">
@@ -21,5 +28,22 @@
       <th>Date of birth</th>
       <td>{{dog.dob}}</td>
     </tr>
+    <tr *ngIf="dog.owner">
+      <th>Owner</th>
+      <td><a class="btn btn-sm btn-outline-primary" [routerLink]="[ '/owners/', dog.owner.uuid ]">{{dog.owner.name}}</a></td>
+    </tr>
+    <tr *ngIf="dog.breeder">
+      <th>Breeder</th>
+      <td><a class="btn btn-sm btn-outline-primary" [routerLink]="[ '/breeders/', dog.breeder.uuid ]">{{dog.breeder.name}}</a></td>
+    </tr>
   </tbody>
 </table>
+<app-dog-details-confirm [dog]="dog"></app-dog-details-confirm>
+&nbsp;
+<button class="btn btn-outline-success">
+  Claim Ownership
+</button>
+&nbsp;
+<button class="btn btn-outline-warning">
+  Report an error
+</button>
