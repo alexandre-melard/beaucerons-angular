@@ -1,6 +1,4 @@
-import { BackendService } from '../../backend.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
 import { Dog } from '../dog';
 import { Input } from '@angular/core';
 
@@ -12,4 +10,8 @@ import { Input } from '@angular/core';
 export class DogDetailsComponent {
   @Input() dog!: Dog;
     constructor() {}
+
+    linkLabel() {
+      return this.dog.bookLink?.split('/').slice(0,3).join('/');
+    }
 }

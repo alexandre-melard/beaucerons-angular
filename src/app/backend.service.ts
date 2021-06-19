@@ -111,13 +111,13 @@ export class BackendService {
   }
 
   /* GET dog matching uuid */
-  confirmDog(uuid: string, person: string): Observable<void> {
-    if (!uuid.trim()) {
+  confirmDog(uuid?: string, person?: string): Observable<void> {
+    if (!uuid) {
       // if not search term, return empty record array.
       console.log(`uuid is empty(${uuid})`);
       return of();
     }
-    if (!person.trim()) {
+    if (!person) {
       // if not search term, return empty record array.
       console.log(`person is empty(${person})`);
       return of();

@@ -2,6 +2,7 @@
   <app-dog-details [dog]="dog"></app-dog-details>
   <hr>
   <div class="row">
+    <h2><span i18n="parents|dog's parents title">Parents</span></h2>
     <div class="col">
       <app-dog-details *ngIf="dog.sir" [dog]="dog.sir"></app-dog-details>
     </div>
@@ -10,10 +11,10 @@
     </div>
   </div>
   <hr>
-  <h2>Pedigree</h2>
+  <h2><span i18n="pedigree|dog's pedigree title">Pedigree</span></h2>
   <app-pedigree [uuid]="dog.uuid"></app-pedigree>
   <hr>
-  <h2>Offsprings</h2>
+  <h2><span i18n="offsprings|dog's offsprings title">Offsprings</span></h2>
   <app-offsprings [uuid]="dog.uuid"></app-offsprings>
   <hr>
 </div>

@@ -25,16 +25,18 @@ export class DogComponent {
       if (uuid) {
         // Find the dog that correspond with the uuid provided in route.
         this.backendService.getDog(uuid).subscribe((dog) => {
-          this.dog = dog;
+          this.dog = this.initDog(dog);
           this.backendService.getDogParents(dog.uuid).subscribe((dogs) => {
             if (this.dog) {
               this.dog.sir = this.getSir(dogs, dog.uuid);
               if (this.dog.sir) {
                 this.dog.sir.type = 'male';
+                this.dog.sir = this.initDog(this.dog.sir);
               }
               this.dog.dam = this.getDam(dogs, dog.uuid);
               if (this.dog.dam) {
                 this.dog.dam.type = 'female';
+                this.dog.dam = this.initDog(this.dog.dam);
               }
             }
           });
@@ -62,4 +64,32 @@ export class DogComponent {
   ): Dog | undefined {
     return dogs.filter((d) => d.type == type && d.uuid != uuid).pop();
   }
+
+  private initDog(dog: Dog): Dog {
+    if (dog.other) {
+      const lof = dog.other.split(';').filter(o => o.includes('LOF'));
+      if(lof && lof.length > 0) {
+        dog.other = dog.other?.replace(`${lof[0]};`, '');
+        dog.reg = lof[0].replace(/LOF\s*/, '');
+        dog.book = 'LOF';
+        let id = dog.ship;
+        if (dog.tattoo && dog.tattoo.length > 1) {
+          id = encodeURIComponent(dog.tattoo);
+        }
+        if (id) {
+          dog.bookLink = `https://www.centrale-canine.fr/lofselect/recherche-chien/identifiant?identification=${id}`;
+        }
+        dog.others = dog.other.split(';')
+      }
+    }
+    if (dog?.uuid) {
+      dog.link = `/dog/${dog.uuid}`;
+    }
+    return dog;
+
+  }
+
+  getLink() {
+  }
+
 }

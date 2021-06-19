@@ -1,3 +1,5 @@
+import { ProgressbarInterceptor } from './auth/ProgressbarInterceptor';
+import { ProgressBarService } from './progress-bar.service';
 import { cookies } from './cookies';
 import { environment } from './../environments/environment';
 import { TreemapComponent } from './echarts/treemap/treemap.component';
@@ -20,6 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 import { AppComponent } from './app.component';
@@ -53,6 +56,7 @@ import 'echarts/theme/macarons.js';
     MatAutocompleteModule,
     MatTooltipModule,
     MatDialogModule,
+    MatProgressBarModule,
   ],
   declarations: [
     AppComponent,
@@ -73,6 +77,7 @@ import 'echarts/theme/macarons.js';
   bootstrap: [AppComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ProgressbarInterceptor, multi: true },
   ],
 })
 export class AppModule {}

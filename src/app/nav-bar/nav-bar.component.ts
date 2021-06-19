@@ -1,15 +1,18 @@
+import { ProgressBarService } from './../progress-bar.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css']
+  styleUrls: ['./nav-bar.component.css'],
 })
 export class NavBarComponent implements OnInit {
   public isMenuCollapsed = true;
-  constructor() { }
+  public show: boolean = false;
 
-  ngOnInit(): void {
+  constructor(private progressBarService: ProgressBarService) {
+    progressBarService.show.subscribe((s) => (this.show = s));
   }
 
+  ngOnInit(): void {}
 }

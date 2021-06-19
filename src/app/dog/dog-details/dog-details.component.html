@@ -9,41 +9,59 @@
 <table class="table">
   <tbody>
     <tr *ngIf="dog.type">
-      <th>Sex</th>
+      <th><span i18n="dog sex|label for dog's sex">Sex</span></th>
       <td>{{ (dog.type == "Male")?"Male":"Female"}}</td>
     </tr>
     <tr *ngIf="dog.tattoo">
-      <th>Tattoo</th>
+      <th><span i18n="dog tattoo|label for dog's tattoo">Tattoo</span></th>
       <td>{{dog.tattoo}}</td>
     </tr>
     <tr *ngIf="dog.ship">
-      <th>Ship</th>
+      <th><span i18n="dog ship|label for dog's ship">Ship</span></th>
       <td>{{dog.ship}}</td>
     </tr>
+    <tr *ngIf="dog.reg">
+      <th>{{dog.book}}</th>
+      <td>{{dog.reg}}</td>
+    </tr>
+    <tr *ngIf="dog.bookLink">
+      <th><span i18n="dog link|label for the link to the dog's page">Link</span></th>
+      <td><a class="btn btn-sm btn-outline-primary" [href]="dog.bookLink">{{linkLabel()}}</a></td>
+    </tr>
     <tr *ngIf="dog.cotation">
-      <th>Cotation</th>
+      <th><span i18n="dog cotation|label for the dog's cotation">Cotation</span></th>
       <td>{{dog.cotation}}</td>
     </tr>
     <tr *ngIf="dog.dob">
-      <th>Date of birth</th>
+      <th><span i18n="dog date of birth|label for the dog's date of birth">Date of birth</span></th>
       <td>{{dog.dob}}</td>
     </tr>
+    <tr *ngIf="dog.others">
+      <th><span i18n="dog other data|label for the dog's other data">Other</span></th>
+      <td>
+        <ul>
+          <li *ngFor="let other of dog.others">{{other}}</li>
+        </ul>
+      </td>
+    </tr>
     <tr *ngIf="dog.owner">
-      <th>Owner</th>
-      <td><a class="btn btn-sm btn-outline-primary" [routerLink]="[ '/owners/', dog.owner.uuid ]">{{dog.owner.name}}</a></td>
+      <th><span i18n="dog owner|label for the dog's owner">Owner</span></th>
+      <td><a class="btn btn-sm btn-outline-primary" [routerLink]="[ '/owners/', dog.owner.uuid ]">{{dog.owner.name}}</a>
+      </td>
     </tr>
     <tr *ngIf="dog.breeder">
-      <th>Breeder</th>
-      <td><a class="btn btn-sm btn-outline-primary" [routerLink]="[ '/breeders/', dog.breeder.uuid ]">{{dog.breeder.name}}</a></td>
+      <th><span i18n="dog breeder|label for the dog's breeder">Breeder</span></th>
+      <td><a class="btn btn-sm btn-outline-primary"
+          [routerLink]="[ '/breeders/', dog.breeder.uuid ]">{{dog.breeder.name}}</a></td>
     </tr>
   </tbody>
 </table>
 <app-dog-details-confirm [dog]="dog"></app-dog-details-confirm>
 &nbsp;
 <button class="btn btn-outline-success">
-  Claim Ownership
+  <span i18n="claim ownership|button text to claim dog's ownership">Claim Ownership</span>
 </button>
 &nbsp;
 <button class="btn btn-outline-warning">
-  Report an error
+  <span i18n="report error|button text to report an error">Report an error</span>
 </button>

@@ -1,5 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top mb-3">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <a class="navbar-brand" [routerLink]="'.'">
       <i class="fas fa-paw mr-1"></i>
       <span i18n="beaucerons brand|The beaucerons branding">Beaucerons</span>
@@ -45,5 +44,7 @@
         </li>
       </ul>
     </div>
-  </div>
+    <div class="col-12 float-none  progress">
+      <mat-progress-bar *ngIf="show" class="progress-bar" role="progressbar" mode="indeterminate"></mat-progress-bar>
+    </div>
 </nav>

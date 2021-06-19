@@ -6,3 +6,19 @@ ul
  {
    margin-right: 20px;
  }
+
+nav {
+  flex-wrap: wrap;
+}
+.navbar {
+  padding-bottom: 0;
+}
+
+mat-progress-bar {
+  height: 3px;
+  margin-top: 10px;
+}
+
+.progress {
+  background-color: transparent;
+}
