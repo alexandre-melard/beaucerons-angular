@@ -33,7 +33,7 @@
           </div>
         </li>
       </ul>
-      <ul class="nav navbar-nav me-start me-auto">
+      <ul class="nav navbar-nav me-start me-auto" *ngIf="auth.isAuthenticated$| async">
         <li class="nav-item active">
           <app-search></app-search>
         </li>
@@ -45,6 +45,6 @@
       </ul>
     </div>
     <div class="col-12 float-none  progress">
-      <mat-progress-bar *ngIf="show" class="progress-bar" role="progressbar" mode="indeterminate"></mat-progress-bar>
+      <mat-progress-bar *ngIf="showProgressbar" class="progress-bar" role="progressbar" mode="indeterminate"></mat-progress-bar>
     </div>
 </nav>

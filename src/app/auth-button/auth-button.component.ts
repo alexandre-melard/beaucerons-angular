@@ -5,13 +5,13 @@ import { DOCUMENT } from '@angular/common';
 @Component({
   selector: 'app-auth-button',
   templateUrl: './auth-button.component.html',
-  styleUrls: ['./auth-button.component.css']
+  styleUrls: ['./auth-button.component.css'],
 })
 export class AuthButtonComponent implements OnInit {
+  constructor(
+    @Inject(DOCUMENT) public document: Document,
+    public auth: AuthService
+  ) {}
 
-  constructor(@Inject(DOCUMENT) public document: Document, public auth: AuthService) { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

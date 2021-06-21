@@ -6,6 +6,7 @@ import {
   NgcNoCookieLawEvent,
 } from 'ngx-cookieconsent';
 import { Subscription } from 'rxjs/Subscription';
+import { UserService } from './user/user.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private revokeChoiceSubscription: Subscription | undefined;
   private noCookieLawSubscription: Subscription | undefined;
 
-  constructor(private ccService: NgcCookieConsentService) {}
+  constructor(private ccService: NgcCookieConsentService, private userService: UserService) {}
 
   ngOnInit() {
     // subscribe to cookieconsent observables to react to main events

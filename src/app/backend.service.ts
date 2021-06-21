@@ -15,7 +15,6 @@ export class BackendService {
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'api': 'true'
     }),
   };
 
@@ -145,11 +144,32 @@ export class BackendService {
       )
       .pipe(
         tap((x) =>
-          x.length
+          x && x.length
             ? this.log(`searchRecords: found records matching "${term}"`)
             : this.log(`searchRecords: no records matching "${term}"`)
         ),
         catchError(this.handleError<Record[]>('searchRecords', []))
+      );
+  }
+
+  /* GET users whose name contains search term */
+  searchUsers(term?: string, limit = 20): Observable<Record[]> {
+    if (term && !term.trim()) {
+      // if not search term, return empty record array.
+      return of([]);
+    }
+    return this.http
+      .post<Record[]>(
+        `${this.backendUrl}/api/search/person/${limit}/${term}`,
+        this.httpOptions
+      )
+      .pipe(
+        tap((x) =>
+           x && x.length
+            ? this.log(`searchRecords: found users matching "${term}"`)
+            : this.log(`searchRecords: no users matching "${term}"`)
+        ),
+        catchError(this.handleError<Record[]>('searchUSers', []))
       );
   }
 
